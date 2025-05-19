@@ -1,0 +1,42 @@
+namespace calk
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string formula = "k1(b-c)+v1(b-c)";
+            int k1 = 1;
+            int b = 3;
+            int c = 2;
+            int v1 = 4;
+            List<string> list = ExtractVariableNames(formula);
+            foreach(string str in list)
+            {
+                Console.WriteLine(str);
+            }
+        }
+
+
+        static List<string> ExtractVariableNames(string formula)
+        {
+            // 演算子・括弧・空白などを区切りにしてトークン分割
+            var tokens = Regex.Split(formula, @"[^a-zA-Z0-9_]+");
+
+            var set = new HashSet<string>();
+
+            foreach (var token in tokens)
+            {
+                if (string.IsNullOrWhiteSpace(token))
+                    continue;
+
+                // 数値は除外（例：123）
+                if (int.TryParse(token, out _))
+                    continue;
+
+                set.Add(token);
+            }
+
+            return new List<string>(set);
+        }
+    }
+}
